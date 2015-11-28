@@ -1,0 +1,19 @@
+# Ignore list for CodeComposer Studio 6
+*.ccsproject
+*.cproject
+*.launches
+*.project
+*.obj
+*.opt
+*.pp
+*.out
+*.mk
+*.xml
+
+# Folder to ignore
+libDev/
+Debug*/
+.settings/
+.metadata/
+dvt/
+RemoteSystemsTempFiles/
