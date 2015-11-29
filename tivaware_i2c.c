@@ -25,6 +25,7 @@
 void i2c0_init(){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
     SysCtlPeripheralReset(SYSCTL_PERIPH_I2C0);
+
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
 
     GPIOPinConfigure(GPIO_PB2_I2C0SCL);
@@ -33,7 +34,7 @@ void i2c0_init(){
     GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
     GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
 
-    I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), false);
+    I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), true);
 
 //    HWREG(I2C0_BASE + I2C_O_FIFOCTL) = 80008000;
 }
