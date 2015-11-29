@@ -8,7 +8,12 @@
 #include "utils/uartstdio.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
-#include "i2c.h"
+
+#include "inc/hw_i2c.h"
+#include "driverlib/i2c.h"
+
+
+#include "tivaware_i2c.h"
 
 void ConfigureUART(void)
 {
@@ -46,6 +51,9 @@ void ConfigureUART(void)
  */
 int main(void) {
 
+	uint8_t ret;
+	uint32_t err;
+
 
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ | SYSCTL_OSC_MAIN);
 
@@ -53,12 +61,23 @@ int main(void) {
 
     UARTprintf("MPU9250Test\n");
 
+    while(1){
+
     i2c0_init();
-    i2c0_write_byte(0x12, 0x34, 0x56);
+
+    i2c0_write_byte(0x68, 0x0C, 123);
+    err = I2CMasterErr(I2C0_BASE);
+    if (err != 0){
+    	UARTprintf("Error!\n");
+    }
 
 
+    i2c0_read_byte(0x68, 0x0C, &ret);
+    err = I2CMasterErr(I2C0_BASE);
+    if (err!= 0){
+    	UARTprintf("Error!\n");
+    }
 
-
-
+    }
 	return 0;
 }

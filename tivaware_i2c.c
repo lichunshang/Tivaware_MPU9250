@@ -7,6 +7,8 @@
 
 
 
+#include "tivaware_i2c.h"
+
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -18,7 +20,6 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
-#include "i2c.h"
 
 
 void i2c0_init(){
