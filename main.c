@@ -47,7 +47,61 @@ void ConfigureUART(void)
 }
 
 
+void test1(){
+	//    Mag Stuff
+	    i2c0_write_byte(0x1E, 0x02, 0x00);
+	    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
 
+	    while(1){
+	    	uint8_t buff[6];
+	    	uint16_t x, y, z;
+	    	i2c0_read_bytes(0x1E, 0x03, buff, 6);
+	    	UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+
+	//    	i2c0_read_byte(0x1E, 0x03, &buff[0]);
+	//    	i2c0_read_byte(0x1E, 0x04, &buff[1]);
+	//    	i2c0_read_byte(0x1E, 0x05, &buff[2]);
+	//    	i2c0_read_byte(0x1E, 0x06, &buff[3]);
+	//    	i2c0_read_byte(0x1E, 0x07, &buff[4]);
+	//    	i2c0_read_byte(0x1E, 0x08, &buff[5]);
+
+	    	x = (((uint16_t)buff[0]) << 8) | ((uint16_t)buff[1]);
+	    	y = (((uint16_t)buff[2]) << 8) | ((uint16_t)buff[3]);
+	    	z = (((uint16_t)buff[4]) << 8) | ((uint16_t)buff[5]);
+
+	    	UARTprintf("%5d %5d %5d\n", (int16_t)x, (int16_t)y, (int16_t)z);
+	    }
+}
+
+void test2(){
+    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+    i2c3_write_byte(0x68, 27, GYRO_FULL_SCALE_2000_DPS);
+    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+    i2c3_write_byte(0x68, 28, ACC_FULL_SCALE_4_G);
+    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+    i2c3_write_byte(0x68, 0x37, 0x02);
+    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+    i2c3_write_byte(MAG_ADDRESS, 0x0A, 0x01);
+    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+
+    while(1){
+    	uint8_t buff[14];
+    	int16_t ax, ay, az, gx, gy, gz;
+    	i2c3_read_bytes(0x68, 0x3B, buff, 14);
+    	UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
+
+    	ax = (int16_t)((((uint16_t)buff[0]) << 8) | ((uint16_t)buff[1]));
+    	ay = (int16_t)((((uint16_t)buff[2]) << 8) | ((uint16_t)buff[3]));
+    	az = (int16_t)((((uint16_t)buff[4]) << 8) | ((uint16_t)buff[5]));
+
+    	gx = (int16_t)((((uint16_t)buff[8]) << 8) | ((uint16_t)buff[9]));
+    	gy = (int16_t)((((uint16_t)buff[10]) << 8) | ((uint16_t)buff[11]));
+    	gz = (int16_t)((((uint16_t)buff[12]) << 8) | ((uint16_t)buff[13]));
+
+    	UARTprintf("%5d %5d %5d\n", gx, gy, gz);
+//    	SysCtlDelay(1000u);
+    }
+}
 
 /*
  * main.c
@@ -75,61 +129,7 @@ int main(void) {
     UARTprintf("MPU9250Test\n");
 
 
-    i2c0_init();
-
-    UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-    i2c0_write_byte(0x68, 27, GYRO_FULL_SCALE_2000_DPS);
-    UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-    i2c0_write_byte(0x68, 28, ACC_FULL_SCALE_4_G);
-    UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-    i2c0_write_byte(0x68, 0x37, 0x02);
-    UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-    i2c0_write_byte(MAG_ADDRESS, 0x0A, 0x01);
-    UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-
-    while(1){
-    	uint8_t buff[14];
-    	int16_t ax, ay, az, gx, gy, gz;
-    	i2c0_read_bytes(0x68, 0x3B, buff, 14);
-    	UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-
-    	ax = (int16_t)((((uint16_t)buff[0]) << 8) | ((uint16_t)buff[1]));
-    	ay = (int16_t)((((uint16_t)buff[2]) << 8) | ((uint16_t)buff[3]));
-    	az = (int16_t)((((uint16_t)buff[4]) << 8) | ((uint16_t)buff[5]));
-
-    	gx = (int16_t)((((uint16_t)buff[8]) << 8) | ((uint16_t)buff[9]));
-    	gy = (int16_t)((((uint16_t)buff[10]) << 8) | ((uint16_t)buff[11]));
-    	gz = (int16_t)((((uint16_t)buff[12]) << 8) | ((uint16_t)buff[13]));
-
-    	UARTprintf("%5d %5d %5d\n", gx, gy, gz);
-    	SysCtlDelay(1000u);
-    }
-
-
-
-////    Mag Stuff
-//    i2c0_write_byte(0x1E, 0x02, 0x00);
-//    UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-//
-//    while(1){
-//    	uint8_t buff[6];
-//    	uint16_t x, y, z;
-//    	i2c0_read_bytes(0x1E, 0x03, buff, 6);
-//    	UARTprintf("Error: %5u\n", I2CMasterErr(I2C0_BASE));
-//
-////    	i2c0_read_byte(0x1E, 0x03, &buff[0]);
-////    	i2c0_read_byte(0x1E, 0x04, &buff[1]);
-////    	i2c0_read_byte(0x1E, 0x05, &buff[2]);
-////    	i2c0_read_byte(0x1E, 0x06, &buff[3]);
-////    	i2c0_read_byte(0x1E, 0x07, &buff[4]);
-////    	i2c0_read_byte(0x1E, 0x08, &buff[5]);
-//
-//    	x = (((uint16_t)buff[0]) << 8) | ((uint16_t)buff[1]);
-//    	y = (((uint16_t)buff[2]) << 8) | ((uint16_t)buff[3]);
-//    	z = (((uint16_t)buff[4]) << 8) | ((uint16_t)buff[5]);
-//
-//    	UARTprintf("%5d %5d %5d\n", (int16_t)x, (int16_t)y, (int16_t)z);
-//    }
+    i2c3_init();
 
 
 	return 0;

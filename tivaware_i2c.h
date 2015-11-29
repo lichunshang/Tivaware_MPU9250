@@ -11,10 +11,10 @@
 #define I2C_H_
 
 
-void i2c0_init();
+void i2c3_init();
 
-void i2c0_read_byte(uint8_t addr, uint8_t reg_addr, uint8_t *ret);
-void i2c0_read_bytes(uint8_t addr, uint8_t reg_addr, uint8_t *buffer, uint8_t length);
-void i2c0_write_byte(uint8_t addr, uint8_t reg_addr, uint8_t data);
+void i2c3_read_byte(uint8_t addr, uint8_t reg_addr, uint8_t *ret);
+void i2c3_read_bytes(uint8_t addr, uint8_t reg_addr, uint8_t *buffer, uint8_t length);
+void i2c3_write_byte(uint8_t addr, uint8_t reg_addr, uint8_t data);
 
 #endif /* I2C_H_ */
