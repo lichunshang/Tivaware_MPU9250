@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
@@ -46,13 +47,14 @@ void ConfigureUART(void)
 }
 
 
+
+
 /*
  * main.c
  */
 int main(void) {
 
-	uint8_t ret;
-	uint32_t err;
+
 
 
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ | SYSCTL_OSC_MAIN);
@@ -61,23 +63,29 @@ int main(void) {
 
     UARTprintf("MPU9250Test\n");
 
-    while(1){
 
     i2c0_init();
+    i2c0_write_byte(0x1E, 0x02, 0x00);
 
-    i2c0_write_byte(0x68, 0x0C, 123);
-    err = I2CMasterErr(I2C0_BASE);
-    if (err != 0){
-    	UARTprintf("Error!\n");
+    while(1){
+    	uint8_t buff[6];
+    	uint16_t x, y, z;
+    	i2c0_read_bytes(0x1E, 0x03, buff, 6);
+
+//    	i2c0_read_byte(0x1E, 0x03, &buff[0]);
+//    	i2c0_read_byte(0x1E, 0x04, &buff[1]);
+//    	i2c0_read_byte(0x1E, 0x05, &buff[2]);
+//    	i2c0_read_byte(0x1E, 0x06, &buff[3]);
+//    	i2c0_read_byte(0x1E, 0x07, &buff[4]);
+//    	i2c0_read_byte(0x1E, 0x08, &buff[5]);
+
+    	x = (((uint16_t)buff[0]) << 8) | ((uint16_t)buff[1]);
+    	y = (((uint16_t)buff[2]) << 8) | ((uint16_t)buff[3]);
+    	z = (((uint16_t)buff[4]) << 8) | ((uint16_t)buff[5]);
+
+    	UARTprintf("%5d %5d %5d\n", (int16_t)x, (int16_t)y, (int16_t)z);
     }
 
 
-    i2c0_read_byte(0x68, 0x0C, &ret);
-    err = I2CMasterErr(I2C0_BASE);
-    if (err!= 0){
-    	UARTprintf("Error!\n");
-    }
-
-    }
 	return 0;
 }
