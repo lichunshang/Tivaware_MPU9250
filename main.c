@@ -49,21 +49,21 @@ void ConfigureUART(void)
 
 void test1(){
 	//    Mag Stuff
-	    i2c0_write_byte(0x1E, 0x02, 0x00);
+	    i2c3_write_byte(0x1E, 0x02, 0x00);
 	    UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
 
 	    while(1){
 	    	uint8_t buff[6];
 	    	uint16_t x, y, z;
-	    	i2c0_read_bytes(0x1E, 0x03, buff, 6);
+	    	i2c3_read_bytes(0x1E, 0x03, buff, 6);
 	    	UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
 
-	//    	i2c0_read_byte(0x1E, 0x03, &buff[0]);
-	//    	i2c0_read_byte(0x1E, 0x04, &buff[1]);
-	//    	i2c0_read_byte(0x1E, 0x05, &buff[2]);
-	//    	i2c0_read_byte(0x1E, 0x06, &buff[3]);
-	//    	i2c0_read_byte(0x1E, 0x07, &buff[4]);
-	//    	i2c0_read_byte(0x1E, 0x08, &buff[5]);
+	//    	i2c3_read_byte(0x1E, 0x03, &buff[0]);
+	//    	i2c3_read_byte(0x1E, 0x04, &buff[1]);
+	//    	i2c3_read_byte(0x1E, 0x05, &buff[2]);
+	//    	i2c3_read_byte(0x1E, 0x06, &buff[3]);
+	//    	i2c3_read_byte(0x1E, 0x07, &buff[4]);
+	//    	i2c3_read_byte(0x1E, 0x08, &buff[5]);
 
 	    	x = (((uint16_t)buff[0]) << 8) | ((uint16_t)buff[1]);
 	    	y = (((uint16_t)buff[2]) << 8) | ((uint16_t)buff[3]);
@@ -74,6 +74,20 @@ void test1(){
 }
 
 void test2(){
+
+	#define    MPU9250_ADDRESS            0x68
+	#define    MAG_ADDRESS                0x0C
+
+	#define    GYRO_FULL_SCALE_250_DPS    0x00
+	#define    GYRO_FULL_SCALE_500_DPS    0x08
+	#define    GYRO_FULL_SCALE_1000_DPS   0x10
+	#define    GYRO_FULL_SCALE_2000_DPS   0x18
+
+	#define    ACC_FULL_SCALE_2_G        0x00
+	#define    ACC_FULL_SCALE_4_G        0x08
+	#define    ACC_FULL_SCALE_8_G        0x10
+	#define    ACC_FULL_SCALE_16_G       0x18
+
     UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
     i2c3_write_byte(0x68, 27, GYRO_FULL_SCALE_2000_DPS);
     UARTprintf("Error: %5u\n", I2CMasterErr(I2C3_BASE));
@@ -98,7 +112,8 @@ void test2(){
     	gy = (int16_t)((((uint16_t)buff[10]) << 8) | ((uint16_t)buff[11]));
     	gz = (int16_t)((((uint16_t)buff[12]) << 8) | ((uint16_t)buff[13]));
 
-    	UARTprintf("%5d %5d %5d\n", gx, gy, gz);
+    	UARTprintf("Accel %5d %5d %5d\n", ax, ay, az);
+    	UARTprintf("Gyro  %5d %5d %5d\n", gx, gy, gz);
 //    	SysCtlDelay(1000u);
     }
 }
@@ -108,18 +123,6 @@ void test2(){
  */
 int main(void) {
 
-#define    MPU9250_ADDRESS            0x68
-#define    MAG_ADDRESS                0x0C
-
-#define    GYRO_FULL_SCALE_250_DPS    0x00
-#define    GYRO_FULL_SCALE_500_DPS    0x08
-#define    GYRO_FULL_SCALE_1000_DPS   0x10
-#define    GYRO_FULL_SCALE_2000_DPS   0x18
-
-#define    ACC_FULL_SCALE_2_G        0x00
-#define    ACC_FULL_SCALE_4_G        0x08
-#define    ACC_FULL_SCALE_8_G        0x10
-#define    ACC_FULL_SCALE_16_G       0x18
 
 
     SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ | SYSCTL_OSC_MAIN);
