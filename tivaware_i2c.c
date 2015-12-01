@@ -36,7 +36,6 @@ void i2c3_init(){
 
     I2CMasterInitExpClk(I2C3_BASE, SysCtlClockGet(), true);
 
-//    HWREG(I2C3_BASE + I2C_O_FIFOCTL) = 80008000;
 }
 
 void i2c3_read_byte(uint8_t addr, uint8_t reg_addr, uint8_t *ret){
@@ -106,3 +105,6 @@ void i2c3_write_byte(uint8_t addr, uint8_t reg_addr, uint8_t data){
 	while(I2CMasterBusy(I2C3_BASE));
 }
 
+uint32_t i2c_check_err(){
+	return I2CMasterErr(I2C3_BASE);
+}
