@@ -131,6 +131,8 @@ void test3(){
 		
 		mpu9250_read_accel_temp_gyro(a, &t, g);
 		ret = mpu9250_read_mag(m);
+		
+		
 		UARTprintf("Accel %5d %5d %5d\n", a[0], a[1], a[2]);
 		UARTprintf("Temp %5d\n", t);
 		UARTprintf("Gyro %5d %5d %5d\n", g[0], g[1], g[2]);

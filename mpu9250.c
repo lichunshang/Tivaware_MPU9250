@@ -201,3 +201,56 @@ int8_t mpu9250_read_mag(int16_t *data){
 	
 	return MAG_ERR_NOT_READY;
 }
+
+float mpu9250_accel_scale(){
+	switch (ACCEL_SCALE)
+	{
+	// Possible accelerometer scales (and their register bit settings) are:
+	// 2 Gs (00), 4 Gs (01), 8 Gs (10), and 16 Gs  (11). 
+	// Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
+	case AFS_2G:
+		return 2.0/32768.0;
+	case AFS_4G:
+		return 4.0/32768.0;
+	case AFS_8G:
+		return 8.0/32768.0;
+	case AFS_16G:
+		return 16.0/32768.0;
+	}
+	
+	return 0;
+}
+
+float mpu9250_gyro_scale(){
+	switch (GYRO_SCALE)
+	{
+	// Possible gyro scales (and their register bit settings) are:
+	// 250 DPS (00), 500 DPS (01), 1000 DPS (10), and 2000 DPS  (11). 
+	// Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
+	case GFS_250DPS:
+		return 250.0/32768.0;
+	case GFS_500DPS:
+		return 500.0/32768.0;
+	case GFS_1000DPS:
+		return 1000.0/32768.0;
+	case GFS_2000DPS:
+		return 2000.0/32768.0;
+	}
+	
+	return 0;
+}
+
+float mpu9250_mag_scale(){
+	switch (MAG_SCALE)
+	{
+	// Possible magnetometer scales (and their register bit settings) are:
+	// 14 bit resolution (0) and 16 bit resolution (1)
+	case MFS_14BITS:
+		return 10.*4912./8190.; // Proper scale to return milliGauss
+	case MFS_16BITS:
+		return 10.*4912./32760.0; // Proper scale to return milliGauss
+	}
+	
+	return 0;
+}
+

@@ -13,7 +13,7 @@
 #include "tivaware_utils.h"
 
 #define MPU9250_ADDRESS MPU9250_ADDRESS0 //ADO=0
-#define GYRO_SCALE 	GFS_250DPS
+#define GYRO_SCALE 	GFS_1000DPS
 #define ACCEL_SCALE AFS_2G
 #define MAG_SCALE	MFS_16BITS
 #define MAG_MODE	0x06 //100Hz
@@ -41,4 +41,9 @@ void mpu9250_read_gyro(int16_t *data); //length = 3
 
 int8_t mpu9250_read_mag(int16_t *data); //length = 3
 
+
+/*Conversion*/
+float mpu9250_accel_scale();
+float mpu9250_gyro_scale();
+float mpu9250_mag_scale();
 #endif /* MPU9250_H_ */
