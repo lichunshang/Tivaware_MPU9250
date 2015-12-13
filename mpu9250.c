@@ -114,36 +114,90 @@ void mpu9250_self_test(){
  * Length = 7
  * 
  */
-void mpu9250_read_accel_temp_gyro(int16_t *data){
+void mpu9250_read_accel_temp_gyro(int16_t *accel, int16_t *temp, int16_t *gyro){
+	
 	uint8_t buff[14];
 	
-//	mpu9250_read_bytes(MPU9250_ADDRESS, 
+	mpu9250_read_bytes(MPU9250_ADDRESS, ACCEL_XOUT_H, buff, 14);
+	
+	accel[0] = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
+	accel[1] = ((int16_t)buff[2] << 8) | (int16_t)buff[3];
+	accel[2] = ((int16_t)buff[4] << 8) | (int16_t)buff[5];
+	
+	*temp = ((int16_t)buff[6] << 8) | (int16_t)buff[7];
+
+	gyro[0] = ((int16_t)buff[8] << 8) | (int16_t)buff[9];
+	gyro[1] = ((int16_t)buff[10] << 8) | (int16_t)buff[11];
+	gyro[2] = ((int16_t)buff[12] << 8) | (int16_t)buff[13];
 }
 
 /*
  * Length = 3
  */
 void mpu9250_read_accel(int16_t *data){
-
+	uint8_t buff[6];
+	
+	mpu9250_read_bytes(MPU9250_ADDRESS, ACCEL_XOUT_H, buff, 14);
+	
+	data[0] = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
+	data[1] = ((int16_t)buff[2] << 8) | (int16_t)buff[3];
+	data[2] = ((int16_t)buff[4] << 8) | (int16_t)buff[5];
 }
 
 /*
  * Length = 1
  */
 void mpu9250_read_temp(int16_t *data){
-
+	uint8_t buff[2];
+	
+	mpu9250_read_bytes(MPU9250_ADDRESS, TEMP_OUT_H, buff, 14);
+	
+	*data = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
 }
 
 /*
  * Length = 3
  */
 void mpu9250_read_gyro(int16_t *data){
-
+	uint8_t buff[6];
+	
+	mpu9250_read_bytes(MPU9250_ADDRESS, GYRO_XOUT_H, buff, 14);
+	
+	data[0] = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
+	data[1] = ((int16_t)buff[2] << 8) | (int16_t)buff[3];
+	data[2] = ((int16_t)buff[4] << 8) | (int16_t)buff[5];
 }
 
 /*
  * Length = 3
  */
-void mpu9250_read_mag(int16_t *data){
-
+int8_t mpu9250_read_mag(int16_t *data){
+	uint8_t buff[7];
+	int8_t ret;
+	
+	mpu9250_read_byte(AK8963_ADDRESS, AK8963_ST1, buff);
+	
+	//check if data is ready
+	if (buff[0] & 0x01){
+		
+		//check if previous data is skipped
+		if (buff[0] & 0x02){
+			ret = MAG_DATA_SKIPPED;
+		}
+		
+		mpu9250_read_bytes(AK8963_ADDRESS, AK8963_XOUT_L, buff, 7);
+		
+		//check sensor overflow, in this case, we want to return the results anyways, might wrong though
+		if (buff[6]  & 0x08){
+			ret = MAG_DATA_SKIPPED;
+		}
+		
+		data[0] = ((int16_t) buff[1] << 8) | (int16_t)buff[0];
+		data[1] = ((int16_t) buff[3] << 8) | (int16_t)buff[2];
+		data[2] = ((int16_t) buff[5] << 8) | (int16_t)buff[4];
+		
+		return ret;
+	}
+	
+	return MAG_ERR_NOT_READY;
 }

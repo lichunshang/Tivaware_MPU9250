@@ -16,7 +16,11 @@
 #define GYRO_SCALE 	GFS_250DPS
 #define ACCEL_SCALE AFS_2G
 #define MAG_SCALE	MFS_16BITS
-#define MAG_MODE	0x02 //100Hz
+#define MAG_MODE	0x06 //100Hz
+#define MAG_ERR_NOT_READY 	-1
+#define MAG_ERR_OVERFLOW	-2
+#define MAG_DATA_SKIPPED 	1
+
 
 /* Functions for abstraction */
 void mpu9250_write_byte(uint8_t addr, uint8_t reg_addr, uint8_t data);
@@ -30,11 +34,11 @@ void mpu9250_init();
 void mpu9250_calibrate();
 void mpu9250_self_test();
 
-void mpu9250_read_accel_temp_gyro(int16_t *data); //length = 7
+void mpu9250_read_accel_temp_gyro(int16_t *accel, int16_t *temp, int16_t *gyro); //length = 7
 void mpu9250_read_accel(int16_t *data); //length = 3
 void mpu9250_read_temp(int16_t *data); //length = 1
 void mpu9250_read_gyro(int16_t *data); //length = 3
 
-void mpu9250_read_mag(int16_t *data); //length = 3
+int8_t mpu9250_read_mag(int16_t *data); //length = 3
 
 #endif /* MPU9250_H_ */

@@ -15,6 +15,8 @@
 
 
 #include "tivaware_i2c.h"
+#include "tivaware_utils.h"
+#include "mpu9250.h"
 
 void ConfigureUART(void)
 {
@@ -75,7 +77,7 @@ void test1(){
 
 void test2(){
 
-	#define    MPU9250_ADDRESS            0x68
+//	#define    MPU9250_ADDRESS            0x68
 	#define    MAG_ADDRESS                0x0C
 
 	#define    GYRO_FULL_SCALE_250_DPS    0x00
@@ -114,8 +116,28 @@ void test2(){
 
     	UARTprintf("Accel %5d %5d %5d\n", ax, ay, az);
     	UARTprintf("Gyro  %5d %5d %5d\n", gx, gy, gz);
-//    	SysCtlDelay(1000u);
+    	delay_ms(75);
     }
+}
+
+void test3(){
+	
+	int8_t ret;
+	
+	mpu9250_init();
+	
+	while(1){
+		int16_t a[3], t, g[3], m[3];
+		
+		mpu9250_read_accel_temp_gyro(a, &t, g);
+		ret = mpu9250_read_mag(m);
+		UARTprintf("Accel %5d %5d %5d\n", a[0], a[1], a[2]);
+		UARTprintf("Temp %5d\n", t);
+		UARTprintf("Gyro %5d %5d %5d\n", g[0], g[1], g[2]);
+		UARTprintf("Mag %5d %5d %5d ret:%d\n", m[0], m[1], m[2], ret);
+		
+		delay_ms(150);
+	}
 }
 
 /*
@@ -133,7 +155,8 @@ int main(void) {
 
 
     i2c3_init();
-
+    
+    test3();
 
 	return 0;
 }
