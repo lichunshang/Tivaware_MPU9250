@@ -31,7 +31,6 @@ void delay(uint32_t time_ms);
 
 /* Device functions*/
 void mpu9250_init();
-void mpu9250_calibrate();
 void mpu9250_self_test();
 
 void mpu9250_read_accel_temp_gyro(int16_t *accel, int16_t *temp, int16_t *gyro); //length = 7

@@ -116,7 +116,7 @@ void test2(){
 
     	UARTprintf("Accel %5d %5d %5d\n", ax, ay, az);
     	UARTprintf("Gyro  %5d %5d %5d\n", gx, gy, gz);
-    	delay_ms(75);
+    	delay_ms(250);
     }
 }
 
@@ -136,9 +136,9 @@ void test3(){
 		UARTprintf("Accel %5d %5d %5d\n", a[0], a[1], a[2]);
 		UARTprintf("Temp %5d\n", t);
 		UARTprintf("Gyro %5d %5d %5d\n", g[0], g[1], g[2]);
-		UARTprintf("Mag %5d %5d %5d ret:%d\n", m[0], m[1], m[2], ret);
+		UARTprintf("Mag %5d %5d %5d ret:%d\n\n", m[0], m[1], m[2], ret);
 		
-		delay_ms(150);
+		delay_ms(500);
 	}
 }
 
