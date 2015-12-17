@@ -14,7 +14,7 @@
 
 #define MPU9250_ADDRESS MPU9250_ADDRESS0 //ADO=0
 #define GYRO_SCALE 	GFS_1000DPS
-#define ACCEL_SCALE AFS_2G
+#define ACCEL_SCALE AFS_4G
 #define MAG_SCALE	MFS_16BITS
 #define MAG_MODE	0x06 //100Hz
 #define MAG_ERR_NOT_READY 	-1
@@ -45,4 +45,13 @@ int8_t mpu9250_read_mag(int16_t *data); //length = 3
 float mpu9250_accel_scale();
 float mpu9250_gyro_scale();
 float mpu9250_mag_scale();
+
+/*
+ * Apply calibration, all calibrations 
+ * are hardcoded for a given setting
+ */
+void mpu9250_gyro_calibrate(int16_t *data);
+void mpu9250_accel_calibrate(int16_t *data);
+void mpu9250_mag_calibrate(int16_t *data);
+
 #endif /* MPU9250_H_ */

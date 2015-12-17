@@ -102,10 +102,6 @@ void mpu9250_init(){
 
 }
 
-void mpu9250_calibrate(){
-	//TODO
-}
-
 void mpu9250_self_test(){
 	//TODO
 }
@@ -137,7 +133,7 @@ void mpu9250_read_accel_temp_gyro(int16_t *accel, int16_t *temp, int16_t *gyro){
 void mpu9250_read_accel(int16_t *data){
 	uint8_t buff[6];
 	
-	mpu9250_read_bytes(MPU9250_ADDRESS, ACCEL_XOUT_H, buff, 14);
+	mpu9250_read_bytes(MPU9250_ADDRESS, ACCEL_XOUT_H, buff, 6);
 	
 	data[0] = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
 	data[1] = ((int16_t)buff[2] << 8) | (int16_t)buff[3];
@@ -150,7 +146,7 @@ void mpu9250_read_accel(int16_t *data){
 void mpu9250_read_temp(int16_t *data){
 	uint8_t buff[2];
 	
-	mpu9250_read_bytes(MPU9250_ADDRESS, TEMP_OUT_H, buff, 14);
+	mpu9250_read_bytes(MPU9250_ADDRESS, TEMP_OUT_H, buff, 2);
 	
 	*data = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
 }
@@ -161,7 +157,7 @@ void mpu9250_read_temp(int16_t *data){
 void mpu9250_read_gyro(int16_t *data){
 	uint8_t buff[6];
 	
-	mpu9250_read_bytes(MPU9250_ADDRESS, GYRO_XOUT_H, buff, 14);
+	mpu9250_read_bytes(MPU9250_ADDRESS, GYRO_XOUT_H, buff, 6);
 	
 	data[0] = ((int16_t)buff[0] << 8) | (int16_t)buff[1];
 	data[1] = ((int16_t)buff[2] << 8) | (int16_t)buff[3];
@@ -173,7 +169,7 @@ void mpu9250_read_gyro(int16_t *data){
  */
 int8_t mpu9250_read_mag(int16_t *data){
 	uint8_t buff[7];
-	int8_t ret;
+	int8_t ret=0;
 	
 	mpu9250_read_byte(AK8963_ADDRESS, AK8963_ST1, buff);
 	
@@ -254,3 +250,20 @@ float mpu9250_mag_scale(){
 	return 0;
 }
 
+void mpu9250_gyro_calibrate(int16_t *data){
+	const float OFFSET_X = 28; /*27.556999*/
+	const float OFFSET_Y = 47; /*46.885799*/
+	const float OFFSET_Z = -6; /*-6.369200*/
+	
+	data[0] -= OFFSET_X;
+	data[1] -= OFFSET_Y;
+	data[2] -= OFFSET_Z;
+}
+
+void mpu9250_accel_calibrate(int16_t *data){
+	
+}
+
+void mpu9250_mag_calibrate(int16_t *data){
+	
+}
