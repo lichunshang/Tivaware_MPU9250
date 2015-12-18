@@ -52,71 +52,60 @@ def parse_data(data_file):
         
     return data_pts
         
+
+
+data_file = open("data/mag_data9.txt", "r")
+data_pts = parse_data(data_file)
+
+x = []
+y = []
+z = []
+cnt = 0;
+num = len(data_pts)
+print(num)
+
+for pt in data_pts:
+    cnt += 1
+    
+    # for 9   
+    #if (cnt % 10 != 0 ):
+    #    continue
+    
+    # for 7    
+    #if (cnt > 2400 or cnt < 200 ):
+    #    continue
         
-def main():
-
-    data_file = open("data/mag_data9.txt", "r")
-    data_pts = parse_data(data_file)
-
-    x = []
-    y = []
-    z = []
-    cnt = 0;
-    num = len(data_pts)
-    print(num)
-
-    for pt in data_pts:
-        cnt += 1
-        
-        # for 9   
-        #if (cnt % 10 != 0 ):
-        #    continue
-        
-        # for 7    
-        #if (cnt > 2400 or cnt < 200 ):
-        #    continue
-         
-        # for 6    
-        #if (cnt > 5300 or cnt < 500 ):
-        #    continue
-        
-        x.append(pt.x)
-        y.append(pt.y)
-        z.append(pt.z)
-        
-    x = np.array (x)
-    y = np.array (y)
-    z = np.array (z)
+    # for 6    
+    #if (cnt > 5300 or cnt < 500 ):
+    #    continue
+    
+    x.append(pt.x)
+    y.append(pt.y)
+    z.append(pt.z)
+    
+x = np.array (x)
+y = np.array (y)
+z = np.array (z)
 
 
-    #3d plot
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-    ax.scatter(x, y, z, c=z, depthshade=True)
+#3d plot
+fig = plt.figure(1)
+ax = fig.add_subplot(111, projection="3d")
+ax.scatter(x, y, z, c=z, depthshade=True)
 
-    ax.set_xlabel('X Label')
-    ax.set_ylabel('Y Label')
-    ax.set_zlabel('Z Label')
-    plt.draw()
-    
-    
-    #uniform distribution plot, in polar coordinates, theta vs phi
-    r = np.sqrt(x*x + y*y + z*z)
-    
-    theta = np.arctan(np.sqrt(x*x + y*y) / z) * 180 / np.pi
-    phi = np.arctan(y / x) * 180 / np.pi
-    
-    plt.scatter(phi, theta)
-    
-    
-#N = 50
-#x = np.random.rand(N)
-#y = np.random.rand(N)
-#colors = np.random.rand(N)
-#area = np.pi * (15 * np.random.rand(N))**2  # 0 to 15 point radiuses
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+plt.draw()
 
-#plt.scatter(x, y, s=area, c=colors, alpha=0.5)
-#plt.show()
-    
-    
-main()
+
+#uniform distribution plot, in polar coordinates, theta vs phi
+r = np.sqrt(x*x + y*y + z*z)
+
+theta = np.arctan(np.sqrt(x*x + y*y) / z) * 180 / np.pi
+phi = np.arctan2(y, x) * 180 / np.pi
+
+
+fig2 = plt.figure(2)
+plt.scatter(phi, theta, c=z)
+
