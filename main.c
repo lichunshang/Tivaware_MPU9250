@@ -169,10 +169,10 @@ int main(void) {
 
     UARTprintf("Program Start\n");
     
-//    print_values_test();
+    print_values_test();
 //    find_gyro_offset();
 //    test_time();
-    collect_mag_data();
+//    collect_mag_data();
 
 	return 0;
 }

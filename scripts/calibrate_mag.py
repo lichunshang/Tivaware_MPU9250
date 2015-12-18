@@ -54,19 +54,26 @@ def parse_data(data_file):
         
 def main():
 
-    data_file = open("data/mag_data3.txt", "r")
+    data_file = open("data/mag_data9.txt", "r")
     data_pts = parse_data(data_file)
 
     x = []
     y = []
     z = []
     cnt = 0;
+    num = len(data_pts)
+    print(num)
 
     for pt in data_pts:
         cnt += 1
-            
-        if (cnt % 1 != 0):
-            continue
+        
+        # for 7    
+        #if (cnt > 2400 or cnt < 200 ):
+        #    continue
+         
+        # for 6    
+        #if (cnt > 5300 or cnt < 500 ):
+        #    continue
         
         x.append(pt.x)
         y.append(pt.y)
@@ -79,7 +86,7 @@ def main():
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
-    plt.colorbar()
+    #plt.colorbar()
     plt.draw()
 
 
