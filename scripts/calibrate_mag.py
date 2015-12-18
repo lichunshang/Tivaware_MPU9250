@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib
 from mpl_toolkits.mplot3d import Axes3D
-import math
+import numpy as np
 
 class Point3D:
     def __init__(self):
@@ -69,8 +69,8 @@ def main():
         cnt += 1
         
         # for 9   
-        if (cnt % 10 != 0 ):
-            continue
+        #if (cnt % 10 != 0 ):
+        #    continue
         
         # for 7    
         #if (cnt > 2400 or cnt < 200 ):
@@ -83,6 +83,10 @@ def main():
         x.append(pt.x)
         y.append(pt.y)
         z.append(pt.z)
+        
+    x = np.array (x)
+    y = np.array (y)
+    z = np.array (z)
 
 
     #3d plot
@@ -93,12 +97,16 @@ def main():
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
-    #plt.colorbar()
     plt.draw()
     
     
     #uniform distribution plot, in polar coordinates, theta vs phi
+    r = np.sqrt(x*x + y*y + z*z)
     
+    theta = np.arctan(np.sqrt(x*x + y*y) / z) * 180 / np.pi
+    phi = np.arctan(y / x) * 180 / np.pi
+    
+    plt.scatter(phi, theta)
     
     
 #N = 50
